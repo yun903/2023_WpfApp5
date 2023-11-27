@@ -28,9 +28,11 @@
             <TabItem Header="以教師來分類課程">
                 <TreeView x:Name="tvTeacher" Background="#FFE2F6F2">
                     <TreeView.Resources>
+                        <!-- Teacher節點的模板-->
                         <HierarchicalDataTemplate DataType="{x:Type local:Teacher}" ItemsSource="{Binding TeachingCourses}">
                             <TextBlock Text="{Binding TeacherName}"/>
                         </HierarchicalDataTemplate>
+                        <!-- Course節點的模板-->
                         <DataTemplate DataType="{x:Type local:Course}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding CourseName}"/>
