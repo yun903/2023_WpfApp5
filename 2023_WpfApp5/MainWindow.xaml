@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" Background="#FFF7EBEB">
             <Label Content="學生" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="60" Height="50" FontSize="14" Margin="50,0,0,0"/>
-            <ComboBox x:Name="cmbStudent" Width="300" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <ComboBox x:Name="cmbStudent" Width="300" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="cmbStudent_SelectionChanged"/>
         </StackPanel>
         <TabControl Grid.Row="1">
             <TabItem Header="以教師分類課程">
@@ -29,5 +29,15 @@
                 <ListBox x:Name="lbCourse" Background="#FFEAF4E1"/>
             </TabItem>
         </TabControl>
+        <ListView x:Name="lvRecord" Grid.Row="1" Grid.Column="2" Background="#FFE1F4FA" />
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Button x:Name="btnRegister" Content="選課" Width="80" Height="50" Margin="0,100,0,0" FontSize="16" FontWeight="Bold"/>
+            <Button x:Name="btnWithdrawl" Content="退選" Width="80" Height="50" Margin="0,20,0,0" FontSize="16" FontWeight="Bold"/>
+            <Button x:Name="btnSave" Content="儲存紀錄" Width="80" Height="50" Margin="0,20,0,0" FontSize="16" FontWeight="Bold"/>
+        </StackPanel>
+
+        <StatusBar  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+            <Label Name="labelStatus" VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Width="500" Margin="100,0,0,0"/>
+        </StatusBar>
     </Grid>
 </Window>

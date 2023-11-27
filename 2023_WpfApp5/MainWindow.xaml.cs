@@ -1,13 +1,4 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace _2023_WpfApp5
 {
@@ -16,9 +7,35 @@ namespace _2023_WpfApp5
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<Student> students = new List<Student>();
+        Student selectedStudent = null;
+
+        List<Teacher> teachers = new List<Teacher>();
+
+        List<Course> courses = new List<Course>();
         public MainWindow()
         {
             InitializeComponent();
+            InitializeStudent();
+        }
+
+        private void InitializeStudent()
+        {
+            students.Add(new Student { StudentId = "A1234567", StudentName = "陳小明" });
+            students.Add(new Student { StudentId = "A1234578", StudentName = "王小美" });
+            students.Add(new Student { StudentId = "A1236789", StudentName = "黃小琥" });
+            cmbStudent.ItemsSource = students;
+        }
+
+        private void cmbStudent_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedStudent = (Student)cmbStudent.SelectedItem;
+            DisplayStatus();
+        }
+
+        private void DisplayStatus()
+        {
+            labelStatus.Content = $"選取學生： {selectedStudent.ToString()}" ;
         }
     }
 }
