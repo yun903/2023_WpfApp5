@@ -19,7 +19,41 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Background="#FFF9E0E0" Grid.ColumnSpan="3">
             <Label Content="學生" VerticalAlignment="Center" FontSize="16" Margin="100,0,0,0" FontWeight="Bold"/>
-            <ComboBox x:Name="cmbStudent" Width="200" Height="35" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <ComboBox x:Name="cmbStudent" Width="200" Height="35" VerticalAlignment="Center" Margin="20,0,0,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" SelectionChanged="cmbStudent_SelectionChanged" />
         </StackPanel>
+        <TabControl Grid.Row="1">
+            <TabItem Header="以教師分類的課程">
+                <TreeView x:Name="tvTeacher" ItemsSource="{Binding teachers}">
+                    <TreeView.Resources>
+                        <!-- 教師節點的樣式 -->
+                        <HierarchicalDataTemplate DataType="{x:Type local:Teacher}" ItemsSource="{Binding TeachingCourses}">
+                            <TextBlock Text="{Binding TeacherName}" FontWeight="Bold"/>
+                        </HierarchicalDataTemplate>
+
+                        <!-- 課程節點的樣式 -->
+                        <DataTemplate DataType="{x:Type local:Course}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding CourseName}" />
+                                <TextBlock Text=" (" Foreground="Black"/>
+                                <TextBlock Text="{Binding Type}" Foreground="Red"/>
+                                <TextBlock Text=")" Foreground="Blue"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </TabItem>
+            <TabItem Header="所有課程">
+                <ListBox Background="#FFFAF6E0" />
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Button x:Name="btnRegister" Content="選課" Width="80" Height="50" Margin="0, 100,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            <Button x:Name="btnWithdrawl" Content="退選" Width="80" Height="50" Margin="0, 20,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            <Button x:Name="btnSave" Content="儲存紀錄" Width="80" Height="50" Margin="0, 20,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+        </StackPanel>
+        <ListView Grid.Row="1" Grid.Column="2" Background="#FFE3F7F0"/>
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="3">
+            <Label x:Name="labelStatus" Content="狀態列" Width="300" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="100,0,0,0"/>
+        </StatusBar>
     </Grid>
 </Window>
