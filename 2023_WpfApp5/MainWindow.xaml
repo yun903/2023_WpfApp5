@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2023_WpfApp5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="2023選課系統" Height="650" Width="1200">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="500*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="500*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Background="#FFF9E0E0" Grid.ColumnSpan="3">
+            <Label Content="學生" VerticalAlignment="Center" FontSize="16" Margin="100,0,0,0" FontWeight="Bold"/>
+            <ComboBox x:Name="cmbStudent" Width="200" Height="35" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        </StackPanel>
     </Grid>
 </Window>
