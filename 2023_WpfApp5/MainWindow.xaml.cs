@@ -22,7 +22,7 @@ namespace _2023_WpfApp5
             InitializeCourse();
         }
 
-        private static void InitializeCourse()
+        private void InitializeCourse()
         {
             //新增一個名為陳定宏的老師，教授視窗程式設計課程，並開設在四個不同班級
             Teacher teacher1 = new Teacher() { TeacherName = "陳定宏" };
@@ -36,6 +36,11 @@ namespace _2023_WpfApp5
             teacher2.TeachingCourses.Add(new Course(teacher2) { CourseName = "微處理機應用實務", Point = 3, Type = "必修", OpeningClass = "四技二甲" });
             teacher2.TeachingCourses.Add(new Course(teacher2) { CourseName = "微處理機應用實務", Point = 3, Type = "必修", OpeningClass = "四技二乙" });
             teacher2.TeachingCourses.Add(new Course(teacher2) { CourseName = "微處理機應用實務", Point = 3, Type = "必修", OpeningClass = "四技二丙" });
+
+            teachers.Add(teacher1);
+            teachers.Add(teacher2);
+
+            tvTeacher.ItemsSource = teachers;
         }
 
         private void InitializeStudent()
@@ -50,7 +55,7 @@ namespace _2023_WpfApp5
 
         private void cmbStudent_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            selelectedStudent = cmbStudent.SelectedItem as Student;
+            selelectedStudent = (Student)cmbStudent.SelectedItem;
             //將此資訊在labelStatus中顯示
             labelStatus.Content = $"學號：{selelectedStudent.StudentId} 姓名：{selelectedStudent.StudentName}";
 

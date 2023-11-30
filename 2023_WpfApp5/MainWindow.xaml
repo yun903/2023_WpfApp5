@@ -23,7 +23,28 @@
         </StackPanel>
         <TabControl Grid.Row="1" Background="Aqua">
             <TabItem Header="以教師分類的課程">
-                <TreeView/>
+                <TreeView x:Name="tvTeacher">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type local:Teacher}" ItemsSource="{Binding TeachingCourses}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding TeacherName}" />
+                                <TextBlock Text="("/>
+                                <TextBlock Text="{Binding TeachingCourses.Count}"/>
+                                <TextBlock Text=")"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type local:Course}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding CourseName}" FontWeight="Bold" Foreground="Red"/>
+                                <TextBlock Text="{Binding OpeningClass}"/>
+                                <TextBlock Text="/" />
+                                <TextBlock Text="{Binding Type}"/>
+                                <TextBlock Text="{Binding Point}"/>
+                                <TextBlock Text="學分"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
             </TabItem>
             <TabItem Header="所有課程">
                 <ListBox/>
