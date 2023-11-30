@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Background="#FFF9E0E0">
             <Label Content="學生" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" FontWeight="Bold" Margin="100,0,0,0" />
-            <ComboBox x:Name="cmbStudent" Width="200" Height="30" VerticalAlignment="Center" HorizontalAlignment="left" Margin="20,0,0,0"/>
+            <ComboBox x:Name="cmbStudent" Width="200" Height="30" VerticalAlignment="Center" HorizontalAlignment="left" VerticalContentAlignment="Center" Margin="20,0,0,0" SelectionChanged="cmbStudent_SelectionChanged"/>
         </StackPanel>
         <TabControl Grid.Row="1" Background="Aqua">
             <TabItem Header="以教師分類的課程">
