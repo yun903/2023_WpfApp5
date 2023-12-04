@@ -11,8 +11,13 @@ namespace _2023_WpfApp5
         Student selectedStudent = null;
 
         List<Course> courses = new List<Course>();
+        Course selectedCourse = null;
 
         List<Teacher> teachers = new List<Teacher>();
+        Teacher selectedTeacher = null;
+
+        List<Record> records = new List<Record>();
+        Record selectedRecord = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -45,6 +50,15 @@ namespace _2023_WpfApp5
             teachers.Add(teacher3);
 
             tvTeacher.ItemsSource = teachers;
+
+            foreach(Teacher teacher in teachers)
+            {
+                foreach(Course course in teacher.TeachingCourses)
+                {
+                    courses.Add(course);
+                }
+            }
+            lbCourse.ItemsSource = courses;
         }
 
         private void InitializeStudent()
@@ -54,12 +68,75 @@ namespace _2023_WpfApp5
             students.Add(new Student { StudentId = "A1234789", StudentName = "林小英" });
 
             cmbStudent.ItemsSource = students;
+            cmbStudent.SelectedIndex = 0;
         }
 
         private void cmbStudent_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             selectedStudent = (Student)cmbStudent.SelectedItem;
             labelStatus.Content = $"選取學生：{selectedStudent.ToString()}";
+        }
+
+        private void tvTeacher_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (tvTeacher.SelectedItem is Teacher)
+            {
+                selectedTeacher = (Teacher)tvTeacher.SelectedItem;
+                labelStatus.Content = $"選取教師：{selectedTeacher.ToString()}";
+            }
+            else if (tvTeacher.SelectedItem is Course)
+            {
+                selectedCourse = (Course)tvTeacher.SelectedItem;
+                labelStatus.Content = selectedCourse.ToString();
+            }
+        }
+
+        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedStudent == null || selectedCourse == null)
+            {
+                MessageBox.Show("請選取學生或課程");
+                return;
+            }
+            else
+            {
+                Record newRecord = new Record() { SelectedStudent = selectedStudent, SelectedCourse = selectedCourse };
+
+                foreach(Record r in records)
+                {
+                    if (r.Equals(newRecord))
+                    {
+                        MessageBox.Show($"{selectedStudent.StudentName}已選取 {selectedCourse.CourseName}");
+                        return;
+                    }
+                }
+
+                records.Add(newRecord);
+                lvRecord.ItemsSource = records;
+                lvRecord.Items.Refresh();
+            }
+        }
+
+        private void lbCourse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedCourse = (Course)lbCourse.SelectedItem;
+            labelStatus.Content = selectedCourse.ToString();
+        }
+
+        private void lvRecord_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedRecord = (Record)lvRecord.SelectedItem;
+            if (selectedRecord!=null) labelStatus.Content = selectedRecord.ToString();
+        }
+
+        private void btnWithdrawl_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedRecord != null)
+            {
+                records.Remove(selectedRecord);
+                lvRecord.ItemsSource = records;
+                lvRecord.Items.Refresh();
+            }
         }
     }
 }
