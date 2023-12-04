@@ -12,5 +12,10 @@ namespace _2023_WpfApp5
             TeacherName = teacherName;
             TeachingCourses = new ObservableCollection<Course>();
         }
+
+        public override string ToString()
+        {
+            return TeacherName;
+        }
     }
 }
