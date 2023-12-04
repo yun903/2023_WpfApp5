@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
+using System.Windows;
 
 namespace _2023_WpfApp5
 {
@@ -136,6 +142,26 @@ namespace _2023_WpfApp5
                 records.Remove(selectedRecord);
                 lvRecord.ItemsSource = records;
                 lvRecord.Items.Refresh();
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json文件 (*.json)|*.json|All Files (*.*)|*.*";
+            saveFileDialog.Title = "儲存學生選課紀錄";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = true
+                };
+
+                string jsonString = JsonSerializer.Serialize(records, options);
+                File.WriteAllText(saveFileDialog.FileName, jsonString);
             }
         }
     }
