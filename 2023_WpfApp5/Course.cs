@@ -7,5 +7,9 @@
         public int Point { get; set; }
         public String OpeningClass { get; set; }
         public Teacher Tutor { get; set; }
+        public Course(Teacher tutor)
+        {
+            Tutor = tutor;
+        }   
     }
 }
