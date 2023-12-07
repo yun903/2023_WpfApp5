@@ -13,5 +13,10 @@
         {
             Tutor = tutor;
         }
+
+        public override string ToString()
+        {
+            return $"{CourseName}： {Type}{Point}學分";
+        }
     }
 }

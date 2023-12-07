@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
+using System.Windows;
 
 namespace _2023_WpfApp5
 {
@@ -12,7 +18,13 @@ namespace _2023_WpfApp5
         Student selelectedStudent = null;
 
         List<Course> courses = new List<Course>();
+        Course selectedCourse = null;
+
         List<Teacher> teachers = new List<Teacher>();
+        Teacher selectedTeacher = null;
+
+        List<Record> records = new List<Record>();
+        Record selectedRecord = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +53,15 @@ namespace _2023_WpfApp5
             teachers.Add(teacher2);
 
             tvTeacher.ItemsSource = teachers;
+
+            foreach (Teacher teacher in teachers)
+            {
+                foreach (Course course in teacher.TeachingCourses)
+                {
+                    courses.Add(course);
+                }
+            }
+            lbCourse.ItemsSource = courses;
         }
 
         private void InitializeStudent()
@@ -57,8 +78,95 @@ namespace _2023_WpfApp5
         {
             selelectedStudent = (Student)cmbStudent.SelectedItem;
             //將此資訊在labelStatus中顯示
-            labelStatus.Content = $"學號：{selelectedStudent.StudentId} 姓名：{selelectedStudent.StudentName}";
+            labelStatus.Content = $"{selelectedStudent.ToString()}";
 
+        }
+
+        private void tvTeacher_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (tvTeacher.SelectedItem is Teacher)
+            {
+                selectedTeacher = (Teacher)tvTeacher.SelectedItem;
+                labelStatus.Content = $"選取教師： {selectedTeacher.ToString()}";
+            }
+            if (tvTeacher.SelectedItem is Course)
+            {
+                selectedCourse = (Course)tvTeacher.SelectedItem;
+                labelStatus.Content = $"選取課程： {selectedCourse.ToString()}";
+            }
+        }
+
+        private void lbCourse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedCourse = (Course)lbCourse.SelectedItem;
+            labelStatus.Content = $"選取課程： {selectedCourse.ToString()}";
+        }
+
+        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            if (selelectedStudent == null || selectedCourse == null)
+            {
+                MessageBox.Show("請選擇學生或課程");
+                return;
+            }
+            else
+            {
+                Record newRecord = new Record
+                {
+                    SelectedStudent = selelectedStudent,
+                    SelectedCourse = selectedCourse
+                };
+
+                foreach (Record r in records)
+                {
+                    if (r.Equals(newRecord))
+                    {
+                        MessageBox.Show($"{selelectedStudent.StudentName}已經選過{selectedCourse.CourseName}這門課了，請重新選課");
+                        return;
+                    }
+                }
+                records.Add(newRecord);
+                lvRecord.ItemsSource = records;
+                lvRecord.Items.Refresh();
+            }
+        }
+
+        private void lvRecord_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedRecord = (Record)lvRecord.SelectedItem;
+            if (selectedRecord != null)
+            {
+                labelStatus.Content = $"選取紀錄： {selectedRecord.ToString()}";
+            }
+        }
+
+        private void btnWithdrawl_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedCourse != null)
+            {
+                records.Remove(selectedRecord);
+                lvRecord.ItemsSource = records;
+                lvRecord.Items.Refresh();
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json文件|*.json";
+            saveFileDialog.Title = "儲存選課紀錄";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = true
+                };
+                string jsonData = JsonSerializer.Serialize<List<Record>>(records, options);
+                File.WriteAllText(saveFileDialog.FileName, jsonData);
+            }
         }
     }
 }
