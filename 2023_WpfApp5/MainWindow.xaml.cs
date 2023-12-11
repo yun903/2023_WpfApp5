@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
+using System.Windows;
 
 namespace _2023_WpfApp5
 {
@@ -109,7 +115,7 @@ namespace _2023_WpfApp5
                     SelectedCourse = selectedCourse
                 };
 
-                foreach(Record r in records)
+                foreach (Record r in records)
                 {
                     if (r.Equals(newRecord))
                     {
@@ -126,14 +132,14 @@ namespace _2023_WpfApp5
         private void lvRecord_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //此部分還有問題
-            if (records.Count == 0) return;
-            selectedRecord = lvRecord.SelectedItem as Record;
+            if (lvRecord.SelectedItem == null) return;
+            selectedRecord = (Record)lvRecord.SelectedItem;
             labelStatus.Content = $"{selectedRecord.ToString()}";
         }
 
         private void btnWithdrawl_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedRecord !=null)
+            if (selectedRecord != null)
             {
                 records.Remove(selectedRecord);
                 lvRecord.ItemsSource = records;
@@ -142,6 +148,28 @@ namespace _2023_WpfApp5
             else
             {
                 MessageBox.Show("請選取要退選的紀錄");
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+            saveFileDialog.DefaultExt = "json";
+            saveFileDialog.AddExtension = true;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    WriteIndented = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+
+                string json = JsonSerializer.Serialize(records, options);
+                File.WriteAllText(saveFileDialog.FileName, json);
             }
         }
     }
